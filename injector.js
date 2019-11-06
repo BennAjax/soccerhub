@@ -11,7 +11,8 @@
    * @type {*[][]}
    */
   const appDependencies =  [
-      ['_', 'lodash']
+      ['_', 'lodash'],
+      ['passport', 'passport']
   ];
 
   /**
