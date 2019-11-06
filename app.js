@@ -15,7 +15,7 @@
   const injector =  require('./injector');
 
 
-  injector.resolve(function (users) {
+  injector.resolve(function (users, _) {
       // initialize mongodb connection with mongoose
       mongoose.Promise = global.Promise; // Not needed for mongoose v5 upwards
       mongoose.connect('mongodb://localhost:27017/soccerhub', {
@@ -79,5 +79,7 @@
           app.use(passport.initialize());
           app.use(passport.session());
 
+          // sets lodash as a global variable in locals
+          app.locals._ = _;
       }
   });
