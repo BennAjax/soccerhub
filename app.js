@@ -10,6 +10,8 @@
   const mongoStore = require('connect-mongo')(session);
   const mongoose = require('mongoose');
   const flash = require('connect-flash');
+  const passport = require('passport');
+
   const injector =  require('./injector');
 
 
@@ -55,15 +57,19 @@
           app.use(bodyParser.json());
           app.use(bodyParser.urlencoded({ extended: false }));
 
-          app.use(validator());
+         // app.use(validator());
           app.use(session({
               secret: 'mysecret',
-              resave: true,
-              saveInitialized: true,
+              resave: false,
+              saveUninitialized: false,
               store: new mongoStore({ mongooseConnection: mongoose.connection})
           }));
 
           app.use(flash());
+
+          // initialize passport, must be added after session for function properly
+          app.use(passport.initialize());
+          app.use(passport.session());
 
       }
   });
