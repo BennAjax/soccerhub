@@ -7,18 +7,30 @@
                 router.get('/signup', this.signUpPage);
                 router.get('/home', this.homePage);
 
+                router.post('/',userValidation.loginValidation, userValidation.loginErrorCheck, this.postLogin);
                 router.post('/signup', userValidation.signUpValidation, userValidation.signUpErrorCheck, this.postSignUp);
             },
+
             indexPage: function (req, res) {
-                res.render('index');
+                const errors = req.flash('error');
+                res.render('index', {title: 'SoccerHub | SignUp', messages: errors, hasErrors: errors.length > 0});
             },
+
             signUpPage: function (req, res) {
                 const errors = req.flash('error');
                 res.render('signup', {title: 'SoccerHub | SignUp', messages: errors, hasErrors: errors.length > 0});
             },
+
             homePage: function (req, res) {
                 res.render('home') ;
             },
+
+            postLogin: passport.authenticate('local-login', {
+                successRedirect: '/home',
+                failureRedirect: '/',
+                failureFlash: true
+            }),
+
             postSignUp: passport.authenticate('local-signup', { //authenticates the signup submission
                 successRedirect: '/home',
                 failureRedirect: '/signup',
