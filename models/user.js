@@ -1,6 +1,7 @@
 
   const mongoose = require('mongoose');
 
+  // define the user schema
   const userSchema = mongoose.Schema({
       username: {type: String, unique: true},
       fullname: {type: String, unique: true, default: ''},
@@ -13,5 +14,5 @@
       googleTokens: Array
 
   });
-
+  // export userSchema as a model
   module.exports = mongoose.model('User', userSchema);

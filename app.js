@@ -7,7 +7,7 @@
   const cookieParser = require('cookie-parser');
   const validator = require('express-validator');
   const session = require('express-session');
-  const mongoStore = require('connect-mongo')(session);
+  const MongoStore = require('connect-mongo')(session);
   const mongoose = require('mongoose');
   const flash = require('connect-flash');
   const passport = require('passport');
@@ -17,7 +17,7 @@
 
   injector.resolve(function (users) {
       // initialize mongodb connection with mongoose
-      mongoose.Promise = global.Promise;
+      mongoose.Promise = global.Promise; // Not needed for mongoose v5 upwards
       mongoose.connect('mongodb://localhost:27017/soccerhub', {
           useNewUrlParser: true,
           useUnifiedTopology: true,
@@ -48,7 +48,12 @@
       }
 
       function expressConfig(app) {
+          // require passport-local here for authentication
+          require('./passport/passport-local');
+
+          // statically render every file in the public directory
           app.use(express.static('public'));
+          // cookieParser setup
           app.use(cookieParser());
           // view engine setup
           app.set('views', path.join(__dirname, 'views'));
@@ -62,12 +67,15 @@
               secret: 'mysecret',
               resave: false,
               saveUninitialized: false,
-              store: new mongoStore({ mongooseConnection: mongoose.connection})
+              store: new MongoStore({ mongooseConnection: mongoose.connection})
           }));
 
+          // middleware for flash messages
           app.use(flash());
 
-          // initialize passport, must be added after session for function properly
+          /**
+           * Initialize passport, must be added after session for function properly because it makes use of the session
+           */
           app.use(passport.initialize());
           app.use(passport.session());
 
