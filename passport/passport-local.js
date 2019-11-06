@@ -26,7 +26,31 @@
       usernameField: 'email',
       passwordField: 'password',
       passReqToCallback: true
-  }, ((req, username, password, done) => {
+  }, ((req, email, password, done) => {
       // checks if the email already exist
+      User.findOne({'email': email}, ((err, user) => {
+          if (err) {
+              /**
+               * the error here is different from the normal error of not finding the user for example, err here
+               * may result from network connection etc
+               */
+                return done(err);
+          }
+
+          if (user) {
+              // the user email already exist in the database
+              return done(null, false, req.flash('error', 'User with email already exist'))
+          } else {
+
+              let newUser = new User();
+              newUser.username = req.body.username;
+              newUser.email = req.body.email;
+              newUser.password = req.body.password;
+
+              newUser.save((err, newUser) => {
+                 done(null, newUser)
+              });
+          }
+      }))
 
   })));
