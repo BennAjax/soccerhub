@@ -48,10 +48,11 @@
       }
 
       function expressConfig(app) {
-          // require passport-local here for authentication
+          // require passport here for authentication
           require('./passport/passport-local');
           require('./passport/passport-facebook');
-          
+          require('./passport/passport-google');
+
 
           // statically render every file in the public directory
           app.use(express.static('public'));
