@@ -11,7 +11,7 @@
                 router.get('/auth/google', this.getGoogleLogin);
                 router.get('/auth/google/callback', this.googleLogin);
 
-                router.post('/',userValidation.loginValidation, userValidation.loginErrorCheck, this.postLogin);
+                router.post('/', userValidation.loginValidation, userValidation.loginErrorCheck, this.postLogin);
                 router.post('/signup', userValidation.signUpValidation, userValidation.signUpErrorCheck, this.postSignUp);
             },
 

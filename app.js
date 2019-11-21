@@ -15,7 +15,7 @@
   const injector =  require('./injector');
 
 
-  injector.resolve(function (users, _) {
+  injector.resolve(function (users, _, admin) {
       // initialize mongodb connection with mongoose
       mongoose.Promise = global.Promise; // Not needed for mongoose v5 upwards
       mongoose.connect('mongodb://localhost:27017/soccerhub', {
@@ -42,6 +42,7 @@
           // setup the application router
           const router = require('express-promise-router')();
           users.setRoute(router);
+          admin.setRoute(router);
 
           // add router as a middleware
           app.use(router);
